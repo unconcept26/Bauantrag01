@@ -1,37 +1,36 @@
-<!doctype html>
-<html lang="de">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% block title %}Bauantrag OS V8{% endblock %}</title>
-  <link rel="stylesheet" href="/static/styles.css">
-</head>
-<body>
-  {% if user %}
-  <div class="app-shell">
-    <aside class="sidebar">
+{% extends 'base.html' %}
+
+{% block title %}Login – Bauantrag OS V8{% endblock %}
+
+{% block content %}
+<div class="login-body">
+  <div class="login-card">
+    <div class="brand large">Bauantrag <span>OS V8</span></div>
+    <p class="muted">Serverseitiger Zugang für deine Projektakte.</p>
+
+    {% if error %}
+      <div class="alert alert-error">{{ error }}</div>
+    {% endif %}
+
+    <form method="post" action="/login" class="stack-lg">
       <div>
-        <div class="brand">Bauantrag <span>OS V8</span></div>
-        <div class="subbrand">professionelle Projektakte</div>
+        <label>Benutzername</label>
+        <input type="text" name="username" placeholder="admin" required>
       </div>
-      <nav class="nav">
-        <a href="/dashboard" class="nav-link">Dashboard</a>
-        <a href="/projects" class="nav-link">Projekte</a>
-        <a href="/projects/new" class="nav-link">Neues Projekt</a>
-        <a href="/settings" class="nav-link">Einstellungen</a>
-      </nav>
-      <div class="sidebar-footer">
-        <div class="user-badge">{{ user.username }}</div>
-        <a href="/logout" class="button button-secondary button-block">Logout</a>
+
+      <div>
+        <label>Passwort</label>
+        <input type="password" name="password" placeholder="••••••••" required>
       </div>
-    </aside>
-    <main class="content">
-      {% block content %}{% endblock %}
-    </main>
+
+      <button class="button button-primary button-block" type="submit">
+        Einloggen
+      </button>
+    </form>
+
+    <div class="login-hint">
+      Standard: <strong>admin</strong> / <strong>admin123!</strong>
+    </div>
   </div>
-  {% else %}
-    {% block content %}{% endblock %}
-  {% endif %}
-  <script src="/static/app.js"></script>
-</body>
-</html>
+</div>
+{% endblock %}
