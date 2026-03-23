@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="de">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login – Bauantrag OS V8</title>
+  <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body class="login-body">
+  <div class="login-card">
+    <div class="brand large">Bauantrag <span>OS V8</span></div>
+    <p class="muted">Serverseitiger Zugang für deine Projektakte.</p>
+    {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+    <form method="post" action="/login" class="stack-lg">
+      <div>
+        <label>Benutzername</label>
+        <input type="text" name="username" placeholder="admin" required>
+      </div>
+      <div>
+        <label>Passwort</label>
+        <input type="password" name="password" placeholder="••••••••" required>
+      </div>
+      <button class="button button-primary button-block" type="submit">Einloggen</button>
+    </form>
+    <div class="login-hint">
+      Standard: <strong>admin</strong> / <strong>admin123!</strong>
+    </div>
+  </div>
+</body>
+</html>

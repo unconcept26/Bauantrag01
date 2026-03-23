@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block title %}Projekte – Bauantrag OS V8{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Projektliste</h1>
+    <p class="muted">Strukturiert, filterbar und direkt bearbeitbar.</p>
+  </div>
+  <a href="/projects/new" class="button button-primary">Projekt anlegen</a>
+</div>
+
+<div class="card">
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Projekt</th><th>Bundesland</th><th>Stadt</th><th>Vorhaben</th><th>Status</th><th>WoFlV</th><th>Nutzfläche</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+      {% for item in projects %}
+        <tr>
+          <td><strong>{{ item.project['name'] }}</strong></td>
+          <td>{{ item.project['state'] }}</td>
+          <td>{{ item.project['city'] }}</td>
+          <td>{{ item.project['project_type'] }}</td>
+          <td><span class="pill">{{ item.project['status'] }}</span></td>
+          <td>{{ '%.2f'|format(item.areas.woflv_summe) }} m²</td>
+          <td>{{ '%.2f'|format(item.areas.nutz_summe) }} m²</td>
+          <td class="action-links">
+            <a class="link-inline" href="/projects/{{ item.project['id'] }}">bearbeiten</a>
+            <a class="link-inline danger" href="/projects/{{ item.project['id'] }}/delete" onclick="return confirm('Projekt wirklich löschen?')">löschen</a>
+          </td>
+        </tr>
+      {% else %}
+        <tr><td colspan="8" class="muted">Noch keine Projekte vorhanden.</td></tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

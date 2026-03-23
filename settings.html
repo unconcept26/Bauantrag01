@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Einstellungen – Bauantrag OS V8{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Einstellungen</h1>
+    <p class="muted">Passwort und Zugang verwalten.</p>
+  </div>
+</div>
+
+<div class="card narrow-card">
+  <div class="card-header"><h2>Passwort ändern</h2></div>
+  {% if message %}<div class="alert alert-success">{{ message }}</div>{% endif %}
+  {% if error %}<div class="alert alert-error">{{ error }}</div>{% endif %}
+  <form method="post" action="/settings/password" class="stack-lg">
+    <div><label>Aktuelles Passwort</label><input type="password" name="current_password" required></div>
+    <div><label>Neues Passwort</label><input type="password" name="new_password" required></div>
+    <div><label>Neues Passwort wiederholen</label><input type="password" name="confirm_password" required></div>
+    <button class="button button-primary" type="submit">Passwort speichern</button>
+  </form>
+</div>
+{% endblock %}

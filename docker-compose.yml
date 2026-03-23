@@ -1,0 +1,14 @@
+version: '3.9'
+services:
+  bauantrag:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      APP_NAME: Bauantrag OS V8 Live
+      SECRET_KEY: change-me
+      DEFAULT_ADMIN_USERNAME: admin
+      DEFAULT_ADMIN_PASSWORD: admin123!
+      SESSION_HOURS: 12
+    volumes:
+      - ./data:/app/instance

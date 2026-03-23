@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard – Bauantrag OS V8{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>Dashboard</h1>
+    <p class="muted">Alle Projekte, Kennzahlen und Bearbeitungsstände auf einen Blick.</p>
+  </div>
+  <a href="/projects/new" class="button button-primary">Neues Projekt</a>
+</div>
+
+<div class="stats-grid">
+  <div class="stat-card"><div class="stat-label">Gesamtprojekte</div><div class="stat-value">{{ stats.gesamt }}</div></div>
+  <div class="stat-card"><div class="stat-label">Offen / in Arbeit</div><div class="stat-value">{{ stats.offen }}</div></div>
+  <div class="stat-card"><div class="stat-label">Abgabereif</div><div class="stat-value">{{ stats.fertig }}</div></div>
+</div>
+
+<div class="card">
+  <div class="card-header">
+    <h2>Zuletzt bearbeitete Projekte</h2>
+    <a href="/projects" class="link-inline">alle anzeigen</a>
+  </div>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Projekt</th><th>Ort</th><th>Verfahren</th><th>Status</th><th>Gesamtfläche</th><th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in projects %}
+        <tr>
+          <td><strong>{{ item.project['name'] }}</strong></td>
+          <td>{{ item.project['city'] }}</td>
+          <td>{{ item.project['procedure_type'] }}</td>
+          <td><span class="pill">{{ item.project['status'] }}</span></td>
+          <td>{{ '%.2f'|format(item.areas.gesamtflaeche) }} m²</td>
+          <td><a class="link-inline" href="/projects/{{ item.project['id'] }}">öffnen</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="muted">Noch keine Projekte vorhanden.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

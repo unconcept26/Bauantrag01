@@ -1,0 +1,123 @@
+{% extends 'base.html' %}
+{% block title %}Projektakte – Bauantrag OS V8{% endblock %}
+{% block content %}
+<div class="page-header">
+  <div>
+    <h1>{% if project['id'] %}Projektakte bearbeiten{% else %}Neues Projekt{% endif %}</h1>
+    <p class="muted">Professionelle Akte mit Stammdaten, Flächen, Unterlagen und Export.</p>
+  </div>
+  {% if project['id'] %}<a href="/projects/{{ project['id'] }}/export.txt" class="button button-secondary">TXT-Export</a>{% endif %}
+</div>
+
+<form method="post" action="/projects/save" id="project-form" class="stack-xl">
+  <input type="hidden" name="project_id" value="{{ project['id'] or '' }}">
+  <input type="hidden" name="documents_json" id="documents_json">
+  <input type="hidden" name="area_rows_json" id="area_rows_json">
+
+  <div class="grid-2">
+    <section class="card">
+      <div class="card-header"><h2>1. Projektdaten</h2></div>
+      <div class="grid-2 compact-grid">
+        <div><label>Projektname</label><input name="name" value="{{ project['name'] }}" required></div>
+        <div><label>Bauherr</label><input name="client_name" value="{{ project['client_name'] }}"></div>
+        <div><label>Bundesland</label>
+          <select name="state">
+            <option value="NRW" {% if project['state']=='NRW' %}selected{% endif %}>NRW</option>
+            <option value="Hessen" {% if project['state']=='Hessen' %}selected{% endif %}>Hessen</option>
+          </select>
+        </div>
+        <div><label>Stadt</label><input name="city" value="{{ project['city'] }}"></div>
+        <div><label>Verfahren</label>
+          <select name="procedure_type">
+            {% for v in ['Bauantrag','Vereinfachtes Verfahren','Nutzungsänderung'] %}
+            <option value="{{ v }}" {% if project['procedure_type']==v %}selected{% endif %}>{{ v }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div><label>Vorhaben</label>
+          <select name="project_type">
+            {% for v in ['Nutzungsänderung','Umbau','Anbau','Aufstockung','Neubau'] %}
+            <option value="{{ v }}" {% if project['project_type']==v %}selected{% endif %}>{{ v }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div><label>Status</label>
+          <select name="status">
+            {% for v in ['Entwurf','In Bearbeitung','Abgabereif'] %}
+            <option value="{{ v }}" {% if project['status']==v %}selected{% endif %}>{{ v }}</option>
+            {% endfor %}
+          </select>
+        </div>
+        <div class="full"><label>Adresse</label><input name="address" value="{{ project['address'] }}"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="card-header"><h2>2. Notizen</h2></div>
+      <label>Interne Projektvermerke</label>
+      <textarea name="notes" rows="11" placeholder="z. B. planungsrechtliche Hinweise, offene Punkte, Behördenrückläufe">{{ project['notes'] }}</textarea>
+    </section>
+  </div>
+
+  <section class="card">
+    <div class="card-header between">
+      <div>
+        <h2>3. Flächenliste</h2>
+        <p class="muted small">Pro Zeile zwischen WoFlV und Nutzfläche umschalten. Damit exportierst du alles aus einer Hand.</p>
+      </div>
+      <button type="button" class="button button-primary" onclick="addAreaRow()">Fläche hinzufügen</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="area-table">
+        <thead>
+          <tr>
+            <th>Geschoss</th>
+            <th>Bezeichnung</th>
+            <th>m²</th>
+            <th>Modell</th>
+            <th>Unterkategorie</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+
+    <div class="summary-grid" id="area-summary"></div>
+  </section>
+
+  <section class="card">
+    <div class="card-header between">
+      <div>
+        <h2>4. Unterlagenmatrix</h2>
+        <p class="muted small">Pflicht, prüfen oder optional sauber erfassen.</p>
+      </div>
+      <button type="button" class="button button-secondary" onclick="addDocumentRow()">Unterlage hinzufügen</button>
+    </div>
+
+    <div class="table-wrap">
+      <table id="document-table">
+        <thead>
+          <tr>
+            <th>Unterlage</th>
+            <th>Status</th>
+            <th></th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <div class="sticky-actions">
+    <a href="/projects" class="button button-secondary">Zurück</a>
+    <button type="submit" class="button button-primary">Projekt speichern</button>
+  </div>
+</form>
+
+<script>
+  window.initialAreaRows = {{ area_rows|tojson }};
+  window.initialDocuments = {{ documents|tojson }};
+</script>
+{% endblock %}
